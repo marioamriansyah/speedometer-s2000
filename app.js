@@ -50,8 +50,9 @@
   const cluster = document.getElementById('cluster');
   const wrap = document.getElementById('wrap');
 
-  let messageCount = 0;
+  let nuiSeen = false;
   let demoStarted = false;
+  let demoInterval = 0;
 
   /* ══════════════════════════════════════════════════════════════════
      TACHOMETER
@@ -629,7 +630,18 @@
     const message = event.data;
     if (!message || typeof message !== 'object') return;
 
-    messageCount++;
+    // Hanya pesan NUI yang dikenal yang dianggap data dari FiveM. Pesan lain
+    // (mis. skrip HUD yang disuntikkan Netlify saat halaman di-deploy sebagai
+    // situs statis) tidak boleh mematikan mode demo.
+    const known = message.action === 'update' ||
+      message.action === 'setVisible' ||
+      message.action === 'setConfig' ||
+      typeof API[message.action] === 'function';
+
+    if (!known) return;
+
+    nuiSeen = true;
+    stopDemo();
 
     if (message.action === 'update') {
       applySnapshot(message.data);
@@ -660,6 +672,16 @@
      Dipakai saat html/index.html dibuka langsung di browser (di luar FiveM)
      untuk mengembangkan tampilan. Di dalam game client mengirim pesan
      lebih dulu, jadi demo tidak pernah aktif. */
+  function stopDemo() {
+    if (!demoStarted) return;
+    demoStarted = false;
+    if (demoInterval) {
+      clearInterval(demoInterval);
+      demoInterval = 0;
+    }
+    document.body.classList.remove('demo');
+  }
+
   function startDemo() {
     if (demoStarted) return;
     demoStarted = true;
@@ -677,7 +699,7 @@
     API.setSeatbelts(true);
 
     let t = 0;
-    setInterval(function () {
+    demoInterval = setInterval(function () {
       t += 0.06;
 
       const speed = 27 + 21 * Math.sin(t * 0.55);
@@ -694,6 +716,6 @@
   }
 
   setTimeout(function () {
-    if (messageCount === 0) startDemo();
+    if (!nuiSeen) startDemo();
   }, 1200);
 })();
