@@ -1,0 +1,175 @@
+@font-face {
+  font-family: "Rajdhani";
+  src: url("fonts/rajdhani-600.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Rajdhani";
+  src: url("fonts/rajdhani-700.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --on: #fff;
+  --dim: #3a3a3a;
+  --ghost: #141414;
+  --red: #ff2b1f;
+  --gray: #a9a9a9;
+  --hud-scale: 1;
+  --hud-x: 0px;
+  --hud-y: 0px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  background: transparent;
+  overflow: hidden;
+}
+
+body {
+  font-family: "Rajdhani", "Arial Narrow", Arial, sans-serif;
+  font-weight: 700;
+  pointer-events: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* ── penempatan HUD ─────────────────────────────────────────────── */
+.wrap {
+  position: absolute;
+  left: 50%;
+  bottom: 2.4vh;
+  width: 1024px;
+  opacity: 0;
+  transition: opacity 0.22s ease;
+  transform: translateX(-50%) translate(var(--hud-x), var(--hud-y)) scale(var(--hud-scale));
+  transform-origin: bottom center;
+  will-change: transform, opacity;
+}
+
+.wrap.visible { opacity: 1; }
+
+.wrap[data-position="top"] {
+  bottom: auto;
+  top: 2.4vh;
+  transform-origin: top center;
+}
+
+/* ── cluster ────────────────────────────────────────────────────── */
+.cluster {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-family: inherit;
+  font-weight: 700;
+  transition: opacity 0.25s ease;
+}
+
+.cluster.off { opacity: 0.3; }
+.cluster.no-status #status { display: none; }
+
+.num {
+  font-size: 30px;
+  fill: #3a3a3a;
+  text-anchor: middle;
+  dominant-baseline: central;
+  transition: fill 0.12s linear;
+}
+
+.num.on { fill: var(--on); }
+.num.red { fill: var(--red); filter: url(#glow); }
+
+.small { font-size: 12.5px; fill: #9a9a9a; font-weight: 600; }
+
+.lbl {
+  font-size: 23px;
+  fill: var(--on);
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.unit { font-size: 24px; fill: var(--on); }
+.unit.g { fill: var(--gray); }
+
+.trip {
+  font-size: 10.5px;
+  fill: #c7c7c7;
+  letter-spacing: 1px;
+  font-weight: 600;
+  text-anchor: middle;
+}
+
+/* ── seven segment ──────────────────────────────────────────────── */
+.seg { fill: #191919; transition: fill 0.1s linear; }
+.seg.on { fill: var(--on); }
+
+.big .seg { fill: var(--ghost); }
+.big .seg.on { fill: var(--on); filter: url(#glowW); }
+
+#odo .seg.on { fill: #e9e9e9; }
+
+/* ── ikon statis (temperatur & bensin) ──────────────────────────── */
+.icon {
+  fill: none;
+  stroke: var(--gray);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ── bar temperatur & bensin ────────────────────────────────────── */
+.bar { transition: fill 0.14s linear; }
+.bar-dim { fill: #262626; }
+.bar-dim-red { fill: #3a0d09; }
+.bar-lit { fill: var(--on); }
+.bar-hot { fill: var(--red); filter: url(#glow); }
+
+/* ── baris status ───────────────────────────────────────────────── */
+#status .turn { fill: #262626; transition: fill 0.1s linear; }
+#status .turn.on { fill: var(--on); filter: url(#glow); }
+
+#status .shape {
+  fill: none;
+  stroke: #3a3a3a;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke 0.12s linear;
+}
+
+#status .belt.on .shape { stroke: var(--on); }
+#status .belt.off { filter: url(#glow); }
+#status .belt.off .shape { stroke: var(--red); }
+
+#status .head.on .shape { stroke: var(--on); }
+#status .head.high { filter: url(#glow); }
+
+#status .rays { display: none; }
+#status .head.high .rays { display: block; }
+
+#status .gear {
+  font-size: 17px;
+  fill: #e6e6e6;
+  text-anchor: middle;
+  dominant-baseline: central;
+  letter-spacing: 0.5px;
+}
+
+/* panah shift: ▲ hijau saat naik, ▼ merah saat turun */
+#status .gear-arrow {
+  font-size: 12px;
+  text-anchor: middle;
+  dominant-baseline: central;
+  opacity: 0;
+}
+
+#status .gear-arrow.up { opacity: 1; fill: #35d94a; filter: url(#glow); }
+#status .gear-arrow.down { opacity: 1; fill: var(--red); filter: url(#glow); }
