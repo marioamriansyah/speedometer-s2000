@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>Speedometer Cluster</title>
-<link rel="stylesheet" href="style.css?v=4">
+<link rel="stylesheet" href="style.css?v=5">
 </head>
 <body>
 <div class="wrap" id="wrap" data-position="bottom">
@@ -24,6 +24,12 @@
     <g id="ticks"></g>
     <g id="mini" stroke="#fff" stroke-width="1.4" opacity=".85"></g>
     <line x1="767" y1="98" x2="761" y2="109" stroke="#ff2b1f" stroke-width="2.5" filter="url(#glow)"/>
+
+    <!-- jarum penunjuk tachometer, posisi dihitung app.js -->
+    <g id="needle">
+      <polygon id="needle-head" points=""/>
+      <line id="needle-tail" x1="0" y1="0" x2="0" y2="0"/>
+    </g>
 
     <g id="numbers"></g>
     <text class="small" x="237" y="164">x1000r/min</text>
@@ -84,6 +90,6 @@
     </g>
   </svg>
 </div>
-<script src="app.js?v=4"></script>
+<script src="app.js?v=5"></script>
 </body>
 </html>

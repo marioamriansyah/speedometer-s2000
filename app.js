@@ -1,9 +1,9 @@
 /*
     Speedometer cluster — NUI
     API mengikuti jgvrp-speedometer-template:
-        setEngine, setSpeed, setRPM, setFuel, setHealth, setGear,
-        setHeadlights, setLeftIndicator, setRightIndicator, setSeatbelts,
-        setSpeedMode, setOdometer
+        setEngine, setSpeed, setRPM, setFuel, setHealth, setEngineHealth,
+        setGear, setHeadlights, setLeftIndicator, setRightIndicator,
+        setSeatbelts, setSpeedMode, setOdometer, setTrip, setRedline
 */
 (function () {
   'use strict';
@@ -230,6 +230,53 @@
     }
 
     paintNumbers(ratio * MAX_TACH);
+    paintNeedle(ratio);
+  }
+
+  /* ── jarum penunjuk tachometer ──────────────────────────────────── */
+  const needleHead = document.getElementById('needle-head');
+  const needleTail = document.getElementById('needle-tail');
+  let needleRatio = -1;
+
+  // Jarum mengikuti busur RPM: ujung lancip menempel di skala, ekor meruncing
+  // ke dalam. Posisi dihitung dari rasio 0–1 sepanjang busur.
+  function paintNeedle(ratio) {
+    const r = clamp(isNum(ratio) ? ratio : 0, 0, 1);
+    if (r === needleRatio) return;
+    needleRatio = r;
+
+    const point = arcPoint(162 - 144 * r);
+    const dx = ARC.px - point[0];
+    const dy = ARC.py - point[1];
+    const dist = Math.hypot(dx, dy) || 1;
+    const ux = dx / dist;                                 // arah ke dalam busur
+    const uy = dy / dist;
+    const nx = -uy;                                       // tegak lurus
+    const ny = ux;
+
+    const at = function (d) {
+      return [point[0] + ux * d, point[1] + uy * d];
+    };
+    const fix = function (pair) {
+      return pair[0].toFixed(1) + ',' + pair[1].toFixed(1);
+    };
+
+    const tip = at(2);
+    const base = at(32);
+    const halfWidth = 7.5;
+
+    needleHead.setAttribute('points', [
+      fix(tip),
+      fix([base[0] + nx * halfWidth, base[1] + ny * halfWidth]),
+      fix([base[0] - nx * halfWidth, base[1] - ny * halfWidth]),
+    ].join(' '));
+
+    const tailFrom = at(28);
+    const tailTo = at(74);
+    needleTail.setAttribute('x1', tailFrom[0].toFixed(1));
+    needleTail.setAttribute('y1', tailFrom[1].toFixed(1));
+    needleTail.setAttribute('x2', tailTo[0].toFixed(1));
+    needleTail.setAttribute('y2', tailTo[1].toFixed(1));
   }
 
   /* ══════════════════════════════════════════════════════════════════
@@ -377,9 +424,12 @@
     }
   }
 
+  // Suhu mesin terhubung ke health engine: mesin sehat = 5 bar (tengah),
+  // makin rusak makin panas sampai 8 bar (H, merah).
   function paintTemperature() {
     const health = clamp(isNum(state.health) ? state.health : 1, 0, 1);
-    const lit = state.engine ? clamp(2 + Math.round((1 - health) * 6), 0, 8) : 0;
+    const extra = health < 0.85 ? Math.round(((0.85 - health) / 0.85) * 3) : 0;
+    const lit = state.engine ? clamp(5 + extra, 0, 8) : 0;
 
     if (lit === litTemp) return;
     litTemp = lit;
@@ -482,6 +532,14 @@
       paintTemperature();
     },
 
+    // Health engine dari client: terima 0–1000 (GetVehicleEngineHealth)
+    // maupun 0–1. Nilai ini yang menggerakkan bar temperatur.
+    setEngineHealth: function (value) {
+      if (!isNum(value)) return;
+      state.health = clamp(value > 1 ? value / 1000 : value, 0, 1);
+      paintTemperature();
+    },
+
     setGear: function (value) {
       const gear = value === undefined || value === null ? 'N' : String(value);
       const numeric = parseInt(gear, 10);
@@ -561,6 +619,7 @@
     rpm: 'setRPM',
     fuel: 'setFuel',
     health: 'setHealth',
+    engineHealth: 'setEngineHealth',
     gear: 'setGear',
     headlights: 'setHeadlights',
     left: 'setLeftIndicator',
@@ -678,7 +737,7 @@
     API.setRPM(0.55);
     API.setGear('4');
     API.setFuel(0.7);
-    API.setHealth(0.92);
+    API.setEngineHealth(920);
     API.setOdometer(48213.4);
     API.setTrip(34.2);
     setVisible(true);
