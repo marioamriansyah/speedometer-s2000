@@ -698,9 +698,11 @@
     API.setHeadlights(1);
     API.setSeatbelts(true);
 
-    let t = 0;
+    const started = performance.now();
     demoInterval = setInterval(function () {
-      t += 0.06;
+      // Berbasis waktu, bukan hitungan tick: nilai tetap benar walau timer
+      // di-throttle browser (tab tidak aktif / panel preview di belakang).
+      const t = (performance.now() - started) / 1000;
 
       const speed = 27 + 21 * Math.sin(t * 0.55);
       API.setSpeed(Math.max(0, speed));
