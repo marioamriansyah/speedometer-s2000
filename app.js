@@ -50,9 +50,6 @@
   const cluster = document.getElementById('cluster');
   const wrap = document.getElementById('wrap');
 
-  let nuiSeen = false;
-  let demoStarted = false;
-  let demoInterval = 0;
 
   /* ══════════════════════════════════════════════════════════════════
      TACHOMETER
@@ -632,16 +629,13 @@
 
     // Hanya pesan NUI yang dikenal yang dianggap data dari FiveM. Pesan lain
     // (mis. skrip HUD yang disuntikkan Netlify saat halaman di-deploy sebagai
-    // situs statis) tidak boleh mematikan mode demo.
+    // situs statis) tidak ikut diproses.
     const known = message.action === 'update' ||
       message.action === 'setVisible' ||
       message.action === 'setConfig' ||
       typeof API[message.action] === 'function';
 
     if (!known) return;
-
-    nuiSeen = true;
-    stopDemo();
 
     if (message.action === 'update') {
       applySnapshot(message.data);
@@ -668,56 +662,4 @@
     handler(value);
   });
 
-  /* ── mode demo ────────────────────────────────────────────────────
-     Dipakai saat html/index.html dibuka langsung di browser (di luar FiveM)
-     untuk mengembangkan tampilan. Di dalam game client mengirim pesan
-     lebih dulu, jadi demo tidak pernah aktif. */
-  function stopDemo() {
-    if (!demoStarted) return;
-    demoStarted = false;
-    if (demoInterval) {
-      clearInterval(demoInterval);
-      demoInterval = 0;
-    }
-    document.body.classList.remove('demo');
-  }
-
-  function startDemo() {
-    if (demoStarted) return;
-    demoStarted = true;
-
-    // Latar gelap hanya untuk mode demo/browser. Di FiveM body tetap transparan
-    // supaya cluster menyatu dengan gambar game.
-    document.body.classList.add('demo');
-
-    applyConfig({ position: 'bottom', scale: 1, offsetX: 0, offsetY: 0, showStatusRow: true, unit: 0 });
-    setVisible(true);
-    API.setEngine(true);
-    API.setSpeedMode(0);
-    API.setGear('3');
-    API.setHeadlights(1);
-    API.setSeatbelts(true);
-
-    const started = performance.now();
-    demoInterval = setInterval(function () {
-      // Berbasis waktu, bukan hitungan tick: nilai tetap benar walau timer
-      // di-throttle browser (tab tidak aktif / panel preview di belakang).
-      const t = (performance.now() - started) / 1000;
-
-      const speed = 27 + 21 * Math.sin(t * 0.55);
-      API.setSpeed(Math.max(0, speed));
-      API.setRPM(0.22 + 0.45 * Math.abs(Math.sin(t * 0.9)));
-      API.setFuel(0.62 + 0.1 * Math.sin(t * 0.18));
-      API.setHealth(0.9 - 0.18 * Math.abs(Math.sin(t * 0.12)));
-      API.setGear(String(1 + Math.floor(Math.abs(Math.sin(t * 0.35)) * 5)));
-      API.setOdometer(48213.4 + t * 0.42);
-      API.setTrip(34.2 + t * 0.08);
-      API.setLeftIndicator(t % 14 > 11 && Math.sin(t * 8) > 0);
-      API.setRightIndicator(false);
-    }, 60);
-  }
-
-  setTimeout(function () {
-    if (!nuiSeen) startDemo();
-  }, 1200);
 })();
