@@ -664,6 +664,10 @@
     if (demoStarted) return;
     demoStarted = true;
 
+    // Latar gelap hanya untuk mode demo/browser. Di FiveM body tetap transparan
+    // supaya cluster menyatu dengan gambar game.
+    document.body.classList.add('demo');
+
     applyConfig({ position: 'bottom', scale: 1, offsetX: 0, offsetY: 0, showStatusRow: true, unit: 0 });
     setVisible(true);
     API.setEngine(true);

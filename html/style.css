@@ -34,6 +34,11 @@ html, body {
   overflow: hidden;
 }
 
+/* latar gelap hanya saat mode demo (browser/Netlify); in-game tetap transparan */
+body.demo {
+  background: radial-gradient(circle at 50% 80%, #17171c 0%, #050506 70%);
+}
+
 body {
   font-family: "Rajdhani", "Arial Narrow", Arial, sans-serif;
   font-weight: 700;
