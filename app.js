@@ -662,4 +662,25 @@
     handler(value);
   });
 
+  /* ── pratinjau di browser ─────────────────────────────────────────
+     Saat halaman dibuka di luar FiveM (localhost/Netlify), cluster tampil
+     dengan nilai diam supaya tidak kosong. Tidak ada animasi/simulasi.
+     Di dalam game NUI dimuat dari origin https://cfx-nui-<resource>, jadi
+     blok ini tidak pernah jalan dan body tetap transparan. */
+  const IN_GAME = /^cfx-nui-/i.test(location.hostname);
+
+  if (!IN_GAME) {
+    document.body.classList.add('standalone');
+    applyConfig({ position: 'bottom', scale: 1, offsetX: 0, offsetY: 0, showStatusRow: true, unit: 0 });
+    API.setEngine(true);
+    API.setSpeedMode(0);
+    API.setSpeed(88);
+    API.setRPM(0.55);
+    API.setGear('4');
+    API.setFuel(0.7);
+    API.setHealth(0.92);
+    API.setOdometer(48213.4);
+    API.setTrip(34.2);
+    setVisible(true);
+  }
 })();
