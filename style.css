@@ -138,26 +138,6 @@ body {
 .bar-lit { fill: var(--on); }
 .bar-hot { fill: var(--red); filter: url(#glow); }
 
-/* ── jarum penunjuk tachometer ──────────────────────────────────── */
-#needle {
-  transition: opacity 0.2s linear;
-}
-
-#needle #needle-head {
-  fill: var(--red);
-  filter: url(#glow);
-}
-
-#needle #needle-tail {
-  stroke: var(--red);
-  stroke-width: 3.6;
-  stroke-linecap: round;
-  filter: url(#glow);
-}
-
-/* mesin mati: jarum tidak ditampilkan */
-.cluster.off #needle { opacity: 0; }
-
 /* ── baris status ───────────────────────────────────────────────── */
 #status .turn { fill: #262626; transition: fill 0.1s linear; }
 #status .turn.on { fill: var(--on); filter: url(#glow); }
