@@ -1,0 +1,6 @@
+# Netlify hanya untuk preview NUI (html/css/js).
+# Resource FiveM tetap dijalankan dari root repo: fxmanifest.lua -> ui_page 'html/index.html'.
+
+[build]
+  publish = "html"
+  command = ""
