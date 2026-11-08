@@ -20,7 +20,7 @@
   --ghost: #141414;
   --red: #ff2b1f;
   --gray: #a9a9a9;
-  --hud-scale: 1;
+  --hud-scale: 0.8;
   --hud-x: 0px;
   --hud-y: 0px;
 }
@@ -39,9 +39,10 @@ body {
 
 /* Latar gelap hanya untuk pratinjau di browser (localhost/Netlify). Di dalam
    game halaman dimuat dari cfx-nui-* sehingga body tetap transparan. */
-/* body.standalone {
+body.standalone {
+  opacity: 60%;
   background: radial-gradient(circle at 50% 80%, #17171c 0%, #050506 70%);
-} */
+}
 
 body {
   font-family: "Rajdhani", "Arial Narrow", Arial, sans-serif;
@@ -57,6 +58,8 @@ body {
   left: 50%;
   bottom: 2.4vh;
   width: 1024px;
+  display: flex;
+  justify-content: center;
   opacity: 0;
   transition: opacity 0.22s ease;
   transform: translateX(-50%) translate(var(--hud-x), var(--hud-y)) scale(var(--hud-scale));
@@ -79,6 +82,7 @@ body {
   display: block;
   width: 100%;
   height: auto;
+  margin: 0 auto;
   font-family: inherit;
   font-weight: 700;
   transition: opacity 0.25s ease;
@@ -131,13 +135,13 @@ body {
   fill: var(--gray);
 }
 
-.trip {
+/* .trip {
   font-size: 10.5px;
   fill: #c7c7c7;
   letter-spacing: 1px;
   font-weight: 600;
   text-anchor: middle;
-}
+} */
 
 /* ── seven segment ──────────────────────────────────────────────── */
 .seg {

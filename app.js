@@ -9,7 +9,7 @@
   'use strict';
 
   const NS = 'http://www.w3.org/2000/svg';
-  const DIM_TICK = '#242424';
+  const DIM_TICK = '#5252525d';
 
   const UNIT_FACTORS = [3.6, 2.2369363, 1.9438445];      // m/s -> km/h, mph, knot
   const UNIT_LABELS = ['km/h', 'mph', 'kn'];
@@ -83,9 +83,9 @@
     let cap = 'butt';
 
     if (i === 0) {
-      length = 70;
+      length = 23;
       width = 5;
-      color = '#ffffff';
+      color = 'rgba(255, 255, 255, 0.50)';
       cap = 'round';
     } else if (red) {
       const u = (t - ARC.redline) / Math.max(0.001, ARC.redlineEnd - ARC.redline);
@@ -568,6 +568,17 @@
       }
       applyRedline(start, finish === undefined ? 1 : finish);
     },
+
+    setScale: function (value) {
+      const num = typeof value === 'number' ? value : parseFloat(value);
+      if (!isFinite(num)) return;
+      const s = clamp(num, 0.2, 3);
+      wrap.style.setProperty('--hud-scale', String(s));
+    },
+
+    scale: function (value) {
+      API.setScale(value);
+    },
   };
 
   const SNAPSHOT_KEYS = {
@@ -587,6 +598,10 @@
     odo: 'setOdometer',
     trip: 'setTrip',
     redline: 'setRedline',
+    scale: 'setScale',
+    setScale: 'setScale',
+    hudScale: 'setScale',
+    hud_scale: 'setScale',
   };
 
   function applySnapshot(data) {
@@ -606,7 +621,9 @@
     if (config.position === 'top' || config.position === 'bottom') {
       wrap.dataset.position = config.position;
     }
-    if (isNum(config.scale)) wrap.style.setProperty('--hud-scale', String(clamp(config.scale, 0.5, 2)));
+    if (config.scale !== undefined && config.scale !== null) {
+      API.setScale(config.scale);
+    }
     if (isNum(config.offsetX)) wrap.style.setProperty('--hud-x', config.offsetX + 'px');
     if (isNum(config.offsetY)) wrap.style.setProperty('--hud-y', config.offsetY + 'px');
     if (isNum(config.unit)) API.setSpeedMode(config.unit);
@@ -689,7 +706,7 @@
 
   if (!IN_GAME) {
     document.body.classList.add('standalone');
-    applyConfig({ position: 'bottom', scale: 1, offsetX: 0, offsetY: 0, showStatusRow: true, unit: 0 });
+    applyConfig({ position: 'bottom', offsetX: 0, offsetY: 0, showStatusRow: true, unit: 0 });
     API.setEngine(true);
     API.setSpeedMode(0);
     API.setSpeed(88);
