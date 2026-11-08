@@ -121,25 +121,25 @@
       ticks.push({ node: node, color: spec.color, red: spec.red });
     }
 
-    const mini = document.getElementById('mini');
-    for (let k = 1; k <= 21; k++) {
-      const t = k / 22;
-      if (t > 0.74) continue;
+    buildMini();
+  }
 
-      const point = arcPoint(162 - 144 * t);
-      const dx = ARC.px - point[0];
-      const dy = ARC.py - point[1];
-      const dist = Math.hypot(dx, dy) || 1;
-      const ux = dx / dist;
-      const uy = dy / dist;
-      const offset = 46 + 10 * t;
-      const length = k % 2 ? 6 : 9;
+  function buildMini() {
+    const mini = document.getElementById('mini');
+    if (!mini) return;
+    mini.innerHTML = '';
+    const redlineTick = Math.round(ARC.redline * ARC.count);
+    for (let i = 5; i < redlineTick; i += 5) {
+      const spec = tickSpec(i);
+      const isMajor = (i % 10 === 0);
+      const length = isMajor ? 8 : 5;
+      const offset = spec.length + 8;
 
       el('line', {
-        x1: (point[0] + ux * offset).toFixed(1),
-        y1: (point[1] + uy * offset).toFixed(1),
-        x2: (point[0] + ux * (offset + length)).toFixed(1),
-        y2: (point[1] + uy * (offset + length)).toFixed(1),
+        x1: (spec.point[0] + spec.ux * offset).toFixed(1),
+        y1: (spec.point[1] + spec.uy * offset).toFixed(1),
+        x2: (spec.point[0] + spec.ux * (offset + length)).toFixed(1),
+        y2: (spec.point[1] + spec.uy * (offset + length)).toFixed(1),
       }, mini);
     }
   }
@@ -175,22 +175,22 @@
       tick.node.setAttribute('stroke-linecap', spec.cap);
     });
 
+    buildMini();
     litTicks = -1;
     paintTach();
   }
 
   const NUMBERS = [
-    { value: 0, x: 218, y: 158 },
-    { value: 1, x: 256, y: 137 },
-    { value: 2, x: 310, y: 115 },
-    { value: 3, x: 367, y: 96 },
-    { value: 4, x: 428, y: 83 },
-    { value: 5, x: 487, y: 76 },
-    { value: 6, x: 547, y: 76 },
-    { value: 7, x: 607, y: 84 },
-    { value: 8, x: 678, y: 98 },
-    { value: 8, x: 750, y: 124, red: true, text: '8' },
-    { value: 9, x: 806, y: 151, red: true },
+    { value: 0, x: 218, y: 160 },
+    { value: 1, x: 233, y: 121 },
+    { value: 2, x: 292, y: 101 },
+    { value: 3, x: 365, y: 89 },
+    { value: 4, x: 442, y: 85 },
+    { value: 5, x: 520, y: 86 },
+    { value: 6, x: 597, y: 88 },
+    { value: 7, x: 672, y: 94 },
+    { value: 8, x: 743, y: 105, red: true },
+    { value: 9, x: 796, y: 128, red: true },
   ];
 
   const numberNodes = [];

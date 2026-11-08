@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <title>Speedometer Cluster</title>
-  <link rel="stylesheet" href="style.css?v=6">
+  <link rel="stylesheet" href="style.css?v=7">
 </head>
 
 <body>
@@ -32,19 +32,15 @@
       <!-- tachometer: skala dibangun oleh app.js -->
       <g id="ticks"></g>
       <g id="mini" stroke="#fff" stroke-width="1.4" opacity=".85"></g>
-      <line x1="767" y1="98" x2="761" y2="109" stroke="#ff2b1f" stroke-width="2.5" filter="url(#glow)" />
+      <line x1="767" y1="84" x2="758" y2="92" stroke="#ff2b1f" stroke-width="2.5" filter="url(#glow)" />
 
       <g id="numbers"></g>
-      <text class="small" x="237" y="164">x1000r/min</text>
+      <text class="small" x="242" y="164">x1000r/min</text>
 
       <!-- kecepatan digital -->
       <g class="big" id="speed"></g>
       <text class="unit" id="unit-primary" x="608" y="158">mph</text>
       <text class="unit g" id="unit-secondary" x="608" y="180">km/h</text>
-
-      <!-- odometer & trip -->
-      <text class="trip" x="538" y="197">TRIP</text>
-      <g id="odo"></g>
 
       <!-- temperatur -->
       <g class="icon">
@@ -93,7 +89,7 @@
       </g>
     </svg>
   </div>
-  <script src="app.js?v=6"></script>
+  <script src="app.js?v=7"></script>
 </body>
 
 </html>
