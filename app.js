@@ -36,7 +36,7 @@
     speed: 0,
     rpm: 0,
     fuel: 0,
-    engineHealth: 1,                                 // 0–1, sumber bar temperatur
+    engineHealth: 1,                                 // 0–1, sumber bar health engine
     gear: 'N',
     headlights: 0,
     left: false,
@@ -377,20 +377,26 @@
     }
   }
 
-  // Bar temperatur murni mengikuti health engine:
-  //   health 1.0 → 4 bar, 0.75 → 5, 0.5 → 6, 0.25 → 7, 0 → 8 (H, merah).
-  function paintTemperature() {
+  // Bar health engine (0.0–1.0):
+  //   health 1.0 → 8 bar menyala penuh (putih).
+  //   health <= 0.25 → bar menyala berubah merah (bar-hot) sebagai peringatan kritis.
+  function paintEngineHealth() {
     const health = clamp(isNum(state.engineHealth) ? state.engineHealth : 1, 0, 1);
-    const lit = state.engine ? clamp(Math.round(8 - 4 * health), 4, 8) : 0;
+    const lit = state.engine ? clamp(Math.round(health * 8), 0, 8) : 0;
 
     if (lit === litTemp) return;
     litTemp = lit;
 
+    const isCritical = state.engine && health <= 0.25 && lit > 0;
     for (let i = 0; i < 8; i++) {
       const on = i < lit;
-      const tone = on ? (i >= 6 ? 'bar-hot' : 'bar-lit') : 'bar-dim';
+      const tone = on ? (isCritical ? 'bar-hot' : 'bar-lit') : 'bar-dim';
       tempSegments[i].setAttribute('class', 'bar ' + tone);
     }
+  }
+
+  function paintTemperature() {
+    paintEngineHealth();
   }
 
   function paintFuel() {
@@ -455,7 +461,7 @@
     setEngine: function (value) {
       state.engine = !!value;
       cluster.classList.toggle('off', !state.engine);
-      paintTemperature();
+      paintEngineHealth();
     },
 
     setSpeed: function (value) {
@@ -479,11 +485,11 @@
     },
 
     // Health engine dari client: terima 0–1000 (GetVehicleEngineHealth)
-    // maupun 0–1. Ini satu-satunya sumber bar temperatur.
+    // maupun 0–1.
     setEngineHealth: function (value) {
       if (!isNum(value)) return;
       state.engineHealth = clamp(value > 1 ? value / 1000 : value, 0, 1);
-      paintTemperature();
+      paintEngineHealth();
     },
 
     // Nama lama dari template; diperlakukan sama dengan health engine.
@@ -628,7 +634,7 @@
   paintUnits();
   paintSpeed(true);
   paintOdometer();
-  paintTemperature();
+  paintEngineHealth();
   paintFuel();
   paintStatus();
 

@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <title>Speedometer Cluster</title>
-  <link rel="stylesheet" href="style.css?v=7">
+  <link rel="stylesheet" href="style.css?v=8">
 </head>
 
 <body>
@@ -42,14 +42,15 @@
       <text class="unit" id="unit-primary" x="608" y="158">mph</text>
       <text class="unit g" id="unit-secondary" x="608" y="180">km/h</text>
 
-      <!-- temperatur -->
+      <!-- health engine -->
       <g class="icon">
-        <rect x="125.5" y="147" width="6" height="15" rx="3" />
-        <circle cx="128.5" cy="166" r="3.8" />
-        <path d="M115 169q3-3 6 0t6 0M130 169q3-3 6 0t6 0" transform="translate(-2 0) scale(.9 1)" />
+        <path d="M122 149 h6 v3 h-6 z" />
+        <rect x="117" y="152" width="16" height="14" rx="1.5" />
+        <path d="M113 156 v6 a2 2 0 0 0 4 0 v-6 a2 2 0 0 0 -4 0 z" />
+        <path d="M133 157 h4 v5 h-4" />
       </g>
-      <text class="lbl" x="88" y="188">C</text>
-      <text class="lbl" x="268" y="188">H</text>
+      <text class="lbl" x="88" y="188">E</text>
+      <text class="lbl" x="268" y="188">F</text>
       <g id="temp"></g>
       <line x1="104" y1="202" x2="247" y2="202" stroke="#bbb" stroke-width="2" />
 
@@ -89,7 +90,7 @@
       </g>
     </svg>
   </div>
-  <script src="app.js?v=7"></script>
+  <script src="app.js?v=8"></script>
 </body>
 
 </html>
