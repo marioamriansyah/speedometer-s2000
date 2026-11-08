@@ -41,7 +41,7 @@ body {
    game halaman dimuat dari cfx-nui-* sehingga body tetap transparan. */
 body.standalone {
   opacity: 60%;
-  background: radial-gradient(circle at 50% 80%, #17171c 0%, #050506 70%);
+  /* background: radial-gradient(circle at 50% 80%, #17171c 0%, #050506 70%); */
 }
 
 body {
