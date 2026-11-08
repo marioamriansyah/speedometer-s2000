@@ -25,9 +25,12 @@
   --hud-y: 0px;
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
   background: transparent;
@@ -36,9 +39,9 @@ html, body {
 
 /* Latar gelap hanya untuk pratinjau di browser (localhost/Netlify). Di dalam
    game halaman dimuat dari cfx-nui-* sehingga body tetap transparan. */
-body.standalone {
+/* body.standalone {
   background: radial-gradient(circle at 50% 80%, #17171c 0%, #050506 70%);
-}
+} */
 
 body {
   font-family: "Rajdhani", "Arial Narrow", Arial, sans-serif;
@@ -61,7 +64,9 @@ body {
   will-change: transform, opacity;
 }
 
-.wrap.visible { opacity: 1; }
+.wrap.visible {
+  opacity: 1;
+}
 
 .wrap[data-position="top"] {
   bottom: auto;
@@ -79,8 +84,13 @@ body {
   transition: opacity 0.25s ease;
 }
 
-.cluster.off { opacity: 0.3; }
-.cluster.no-status #status { display: none; }
+.cluster.off {
+  opacity: 0.3;
+}
+
+.cluster.no-status #status {
+  display: none;
+}
 
 .num {
   font-size: 30px;
@@ -90,10 +100,20 @@ body {
   transition: fill 0.12s linear;
 }
 
-.num.on { fill: var(--on); }
-.num.red { fill: var(--red); filter: url(#glow); }
+.num.on {
+  fill: var(--on);
+}
 
-.small { font-size: 12.5px; fill: #9a9a9a; font-weight: 600; }
+.num.red {
+  fill: var(--red);
+  filter: url(#glow);
+}
+
+.small {
+  font-size: 12.5px;
+  fill: #9a9a9a;
+  font-weight: 600;
+}
 
 .lbl {
   font-size: 23px;
@@ -102,8 +122,14 @@ body {
   dominant-baseline: central;
 }
 
-.unit { font-size: 24px; fill: var(--on); }
-.unit.g { fill: var(--gray); }
+.unit {
+  font-size: 24px;
+  fill: var(--on);
+}
+
+.unit.g {
+  fill: var(--gray);
+}
 
 .trip {
   font-size: 10.5px;
@@ -114,13 +140,27 @@ body {
 }
 
 /* ── seven segment ──────────────────────────────────────────────── */
-.seg { fill: #191919; transition: fill 0.1s linear; }
-.seg.on { fill: var(--on); }
+.seg {
+  fill: #191919;
+  transition: fill 0.1s linear;
+}
 
-.big .seg { fill: var(--ghost); }
-.big .seg.on { fill: var(--on); filter: url(#glowW); }
+.seg.on {
+  fill: var(--on);
+}
 
-#odo .seg.on { fill: #e9e9e9; }
+.big .seg {
+  fill: var(--ghost);
+}
+
+.big .seg.on {
+  fill: var(--on);
+  filter: url(#glowW);
+}
+
+#odo .seg.on {
+  fill: #e9e9e9;
+}
 
 /* ── ikon statis (temperatur & bensin) ──────────────────────────── */
 .icon {
@@ -132,15 +172,37 @@ body {
 }
 
 /* ── bar temperatur & bensin ────────────────────────────────────── */
-.bar { transition: fill 0.14s linear; }
-.bar-dim { fill: #262626; }
-.bar-dim-red { fill: #3a0d09; }
-.bar-lit { fill: var(--on); }
-.bar-hot { fill: var(--red); filter: url(#glow); }
+.bar {
+  transition: fill 0.14s linear;
+}
+
+.bar-dim {
+  fill: #262626;
+}
+
+.bar-dim-red {
+  fill: #3a0d09;
+}
+
+.bar-lit {
+  fill: var(--on);
+}
+
+.bar-hot {
+  fill: var(--red);
+  filter: url(#glow);
+}
 
 /* ── baris status ───────────────────────────────────────────────── */
-#status .turn { fill: #262626; transition: fill 0.1s linear; }
-#status .turn.on { fill: var(--on); filter: url(#glow); }
+#status .turn {
+  fill: #262626;
+  transition: fill 0.1s linear;
+}
+
+#status .turn.on {
+  fill: var(--on);
+  filter: url(#glow);
+}
 
 #status .shape {
   fill: none;
@@ -151,15 +213,33 @@ body {
   transition: stroke 0.12s linear;
 }
 
-#status .belt.on .shape { stroke: var(--on); }
-#status .belt.off { filter: url(#glow); }
-#status .belt.off .shape { stroke: var(--red); }
+#status .belt.on .shape {
+  stroke: var(--on);
+}
 
-#status .head.on .shape { stroke: var(--on); }
-#status .head.high { filter: url(#glow); }
+#status .belt.off {
+  filter: url(#glow);
+}
 
-#status .rays { display: none; }
-#status .head.high .rays { display: block; }
+#status .belt.off .shape {
+  stroke: var(--red);
+}
+
+#status .head.on .shape {
+  stroke: var(--on);
+}
+
+#status .head.high {
+  filter: url(#glow);
+}
+
+#status .rays {
+  display: none;
+}
+
+#status .head.high .rays {
+  display: block;
+}
 
 #status .gear {
   font-size: 17px;
@@ -177,5 +257,14 @@ body {
   opacity: 0;
 }
 
-#status .gear-arrow.up { opacity: 1; fill: #35d94a; filter: url(#glow); }
-#status .gear-arrow.down { opacity: 1; fill: var(--red); filter: url(#glow); }
+#status .gear-arrow.up {
+  opacity: 1;
+  fill: #35d94a;
+  filter: url(#glow);
+}
+
+#status .gear-arrow.down {
+  opacity: 1;
+  fill: var(--red);
+  filter: url(#glow);
+}
